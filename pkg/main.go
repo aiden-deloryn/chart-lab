@@ -17,7 +17,7 @@ const (
 func main() {
 	http.HandleFunc("/", handleHelmRequest)
 
-	log.Fatal(http.ListenAndServe(":9000", nil))
+	log.Fatal(http.ListenAndServe(":80", nil))
 }
 
 func handleHelmRequest(res http.ResponseWriter, req *http.Request) {

@@ -1,0 +1,38 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: gitlab-helm-server
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: gitlab-helm-server
+  template:
+    metadata:
+      labels:
+        app: gitlab-helm-server
+    spec:
+      containers:
+      - name: gitlab-helm-server
+        image: aidendeloryn/gitlab-helm-server:latest
+        resources:
+          limits:
+            memory: "128Mi"
+            cpu: "500m"
+        ports:
+        - containerPort: 80
+        - containerPort: 443
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: gitlab-helm-server-service
+spec:
+  selector:
+    app: gitlab-helm-server
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+  - name: https
+    port: 443
