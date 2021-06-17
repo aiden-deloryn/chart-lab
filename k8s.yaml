@@ -1,20 +1,26 @@
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: chartlab
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: gitlab-helm-server
+  name: chartlab-deployment
+  namespace: chartlab
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: gitlab-helm-server
+      app: chartlab-deployment
   template:
     metadata:
       labels:
-        app: gitlab-helm-server
+        app: chartlab-deployment
     spec:
       containers:
-      - name: gitlab-helm-server
-        image: aidendeloryn/gitlab-helm-server:latest
+      - name: chartlab-app
+        image: aidendeloryn/chartlab:latest
         resources:
           limits:
             memory: "128Mi"
@@ -22,14 +28,24 @@ spec:
         ports:
         - containerPort: 80
         - containerPort: 443
+      affinity:
+        nodeAffinity:
+          requiredDuringSchedulingIgnoredDuringExecution:
+            nodeSelectorTerms:
+              - matchExpressions:
+                - key: kubernetes.io/os
+                  operator: NotIn
+                  values:
+                  - windows
 ---
 apiVersion: v1
 kind: Service
 metadata:
-  name: gitlab-helm-server-service
+  name: chartlab-service
+  namespace: chartlab
 spec:
   selector:
-    app: gitlab-helm-server
+    app: chartlab-deployment
   type: NodePort
   ports:
   - name: http
