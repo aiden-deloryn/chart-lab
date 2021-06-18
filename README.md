@@ -23,5 +23,5 @@ Requirements:
 kubectl get service chartlab-service -n chartlab
 
 # Add your private repository to Helm
-helm repo add <repo-name> http://<node-ip>:<node-port>/<gitlab-project-id> --username '<username>' --password '<gitlab-personal-access-token>'
+helm repo add <repo-name> https://<node-ip>:<node-port>/<gitlab-project-id> --username '<username>' --password '<gitlab-personal-access-token>' --insecure-skip-tls-verify
 ```
