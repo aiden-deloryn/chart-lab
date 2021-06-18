@@ -9,7 +9,7 @@ metadata:
   name: chartlab-deployment
   namespace: chartlab
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: chartlab-deployment

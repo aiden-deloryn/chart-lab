@@ -4,7 +4,6 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io/ioutil"
-	"log"
 	"net/http"
 	"strings"
 )
@@ -17,7 +16,12 @@ const (
 func main() {
 	http.HandleFunc("/", handleHelmRequest)
 
-	log.Fatal(http.ListenAndServe(":80", nil))
+	go http.ListenAndServe(":80", nil)
+	go http.ListenAndServeTLS(":443", "ssl/chartlab.crt", "ssl/chartlab.key", nil)
+
+	for {
+		// loop forever
+	}
 }
 
 func handleHelmRequest(res http.ResponseWriter, req *http.Request) {
@@ -61,7 +65,7 @@ func convertRequest(req *http.Request) (*http.Request, error) {
 	splitPath := strings.Split(req.URL.Path, "/")[1:]
 
 	if len(splitPath) < 2 {
-		return nil, fmt.Errorf("Invalid URL. Use 'http://<host>:<port>/<gitlab-project-id>'")
+		return nil, fmt.Errorf("Invalid URL. Use 'http://<node-ip>:<node-port>/<gitlab-project-id>'")
 	}
 
 	projectID := splitPath[0]
