@@ -35,7 +35,7 @@ func main() {
 	fmt.Println(fmt.Sprintf("Listening for HTTP on port: %v", httpPort))
 	go http.ListenAndServe(fmt.Sprintf(":%v", httpPort), nil)
 	fmt.Println(fmt.Sprintf("Listening for HTTPS on port: %v", httpsPort))
-	go http.ListenAndServeTLS(fmt.Sprintf(":%v", httpsPort), "ssl/chartlab.crt", "ssl/chartlab.key", nil)
+	go http.ListenAndServeTLS(fmt.Sprintf(":%v", httpsPort), "tls/tls.crt", "tls/tls.key", nil)
 
 	for {
 		// loop forever

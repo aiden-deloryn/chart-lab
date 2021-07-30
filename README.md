@@ -6,8 +6,23 @@ ChartLab is a lightweight Kubernetes-native application which enables the use of
 
 ## Installation
 
+### Create a TLS secret (optional)
+
+If you want to use HTTPS/TLS to create a secure connection between Helm and ChartLab, [create a new Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets) called `chartlab-tls` in the namespace `chartlab`.
+
 ```sh
-kubectl apply -f https://raw.githubusercontent.com/aiden-deloryn/chart-lab/main/k8s.yaml
+kubectl apply -f https://raw.githubusercontent.com/aiden-deloryn/chart-lab/main/config/namespace.yaml
+```
+```sh
+kubectl create secret tls chartlab-tls --cert=<path-to-cert-file> --key=<path-to-key-file> --namespace chartlab
+```
+
+### Install ChartLab
+
+Install chartlab using the command below.
+
+```sh
+kubectl apply -f https://raw.githubusercontent.com/aiden-deloryn/chart-lab/main/config/deployment.yaml
 ```
 
 ## Usage
@@ -18,28 +33,26 @@ Requirements:
 - The GitLab Project ID for the repository you wish to add. You can find this on the project page at https://gitlab.com below the project name.
 - Your project must contain a [Helm index file](https://helm.sh/docs/helm/helm_repo_index/).
 
-#### Using HTTP
+Get the node port of the ChartLab service. This is the port you will use when adding the Helm repository. Note that there are two exposed ports, one for HTTP and the other for HTTPS.
 
 ```sh
-# Get the node port of the ChartLab service
 kubectl get service chartlab-service -n chartlab
-
-# Add your private repository to Helm
-helm repo add <repo-name> http://<node-ip>:<node-port>/<gitlab-project-id> --username '<username>' --password '<gitlab-personal-access-token>'
-
-# Show a chart's values
-helm show values <repo-name>/<chart>
 ```
 
-#### Using HTTPS
+#### Adding a repository with HTTP
+
+Add your private repository to Helm using `helm repo add`.
 
 ```sh
-# Get the node port of the ChartLab service
-kubectl get service chartlab-service -n chartlab
+helm repo add <repo-name> http://<node-ip>:<node-port>/<gitlab-project-id> --username '<username>' --password '<gitlab-personal-access-token>'
+```
 
-# Add your private repository to Helm
-helm repo add <repo-name> https://<node-ip>:<node-port>/<gitlab-project-id> --username '<username>' --password '<gitlab-personal-access-token>' --insecure-skip-tls-verify
+#### Adding a repository with HTTPS/TLS
 
-# Show a chart's values
-helm show values <repo-name>/<chart> --insecure-skip-tls-verify
+**Note:** If you are using a self-signed certificate, you will need to use the `--insecure-skip-tls-verify` for commands such as `helm repo add` and `helm install`.
+
+Add your private repository to Helm using `helm repo add`.
+
+```sh
+helm repo add <repo-name> https://<node-ip>:<node-port>/<gitlab-project-id> --username '<username>' --password '<gitlab-personal-access-token>'
 ```

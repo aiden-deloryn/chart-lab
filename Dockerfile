@@ -14,10 +14,6 @@ WORKDIR /chartlab
 
 COPY --from=builder /go/bin/app /chartlab/app
 
-COPY ssl/chartlab.crt /chartlab/ssl/
-
-COPY ssl/chartlab.key /chartlab/ssl/
-
 EXPOSE 80/tcp
 
 EXPOSE 443/tcp
