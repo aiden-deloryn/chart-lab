@@ -1,5 +1,9 @@
 # ChartLab
 
+- [About](#about)
+- [Installation](#installation)
+- [Usage](#usage)
+
 ## About
 
 ChartLab is a lightweight Kubernetes-native application which enables the use of private GitLab projects as Helm chart repositories. This is done by converting Helm's HTTP requests into GitLab API calls. Simply install ChartLab on your Kubernetes cluster and point Helm at it when adding a new repository.
@@ -8,12 +12,13 @@ ChartLab is a lightweight Kubernetes-native application which enables the use of
 
 ### Create a TLS secret (optional)
 
-If you want to use HTTPS/TLS to create a secure connection between Helm and ChartLab, [create a new Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets) called `chartlab-tls` in the namespace `chartlab`.
+If you want to use HTTPS/TLS to create a secure connection between Helm and ChartLab, create a new [Kubernetes TLS Secret](https://kubernetes.io/docs/concepts/configuration/secret/#tls-secrets) called `chartlab-tls` in the namespace `chartlab`.
 
 ```sh
+# Create the chartlab namespace
 kubectl apply -f https://raw.githubusercontent.com/aiden-deloryn/chart-lab/main/config/namespace.yaml
-```
-```sh
+
+# Create a TLS secret
 kubectl create secret tls chartlab-tls --cert=<path-to-cert-file> --key=<path-to-key-file> --namespace chartlab
 ```
 
