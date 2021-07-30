@@ -25,7 +25,7 @@ spec:
             optional: true
       containers:
       - name: chartlab-app
-        image: aidendeloryn/chartlab:latest
+        image: aidendeloryn/chartlab:1.0.0
         volumeMounts:
           - name: tls-volume
             mountPath: "/chartlab/tls"
