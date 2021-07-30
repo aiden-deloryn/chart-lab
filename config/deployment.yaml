@@ -18,9 +18,18 @@ spec:
       labels:
         app: chartlab-deployment
     spec:
+      volumes:
+        - name: tls-volume
+          secret:
+            secretName: chartlab-tls
+            optional: true
       containers:
       - name: chartlab-app
         image: aidendeloryn/chartlab:latest
+        volumeMounts:
+          - name: tls-volume
+            mountPath: "/chartlab/tls"
+            readOnly: true
         resources:
           limits:
             memory: "128Mi"
