@@ -18,10 +18,28 @@ Requirements:
 - The GitLab Project ID for the repository you wish to add. You can find this on the project page at https://gitlab.com below the project name.
 - Your project must contain a [Helm index file](https://helm.sh/docs/helm/helm_repo_index/).
 
+#### Using HTTP
+
+```sh
+# Get the node port of the ChartLab service
+kubectl get service chartlab-service -n chartlab
+
+# Add your private repository to Helm
+helm repo add <repo-name> http://<node-ip>:<node-port>/<gitlab-project-id> --username '<username>' --password '<gitlab-personal-access-token>'
+
+# Show a chart's values
+helm show values <repo-name>/<chart>
+```
+
+#### Using HTTPS
+
 ```sh
 # Get the node port of the ChartLab service
 kubectl get service chartlab-service -n chartlab
 
 # Add your private repository to Helm
 helm repo add <repo-name> https://<node-ip>:<node-port>/<gitlab-project-id> --username '<username>' --password '<gitlab-personal-access-token>' --insecure-skip-tls-verify
+
+# Show a chart's values
+helm show values <repo-name>/<chart> --insecure-skip-tls-verify
 ```
