@@ -25,7 +25,7 @@ spec:
             optional: true
       containers:
       - name: chartlab-app
-        image: aidendeloryn/chartlab:1.0.0
+        image: aidendeloryn/chartlab
         volumeMounts:
           - name: tls-volume
             mountPath: "/chartlab/tls"
@@ -33,7 +33,7 @@ spec:
         resources:
           limits:
             memory: "128Mi"
-            cpu: "500m"
+            cpu: "100m"
         ports:
         - containerPort: 80
         - containerPort: 443

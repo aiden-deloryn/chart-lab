@@ -1,0 +1,14 @@
+apiVersion: skaffold/v2beta21
+kind: Config
+metadata:
+  name: chart-lab
+build:
+  artifacts:
+  - image: aidendeloryn/chartlab
+    docker:
+      dockerfile: Dockerfile
+deploy:
+  kubectl:
+    manifests:
+    - config/deployment.yaml
+    - config/namespace.yaml

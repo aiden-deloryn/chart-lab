@@ -1,0 +1,29 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "skaffold-dev",
+            "command": "skaffold",
+            "args": [
+                "dev",
+                "--default-repo",
+                "${env:CHARTLAB_IMAGE_REPO}"
+            ],
+            "options": {
+                "cwd": "${workspaceFolder}"
+            }
+        },
+        {
+            "label": "build-and-run-dev",
+            "dependsOn": [
+                "skaffold-dev",
+            ],
+            "dependsOrder": "sequence",
+            "problemMatcher": [],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+    ]
+  }

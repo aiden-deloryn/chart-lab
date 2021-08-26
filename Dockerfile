@@ -2,7 +2,9 @@ FROM golang:1.16 as builder
 
 WORKDIR /go/src/
 
-COPY . .
+COPY go.mod go.mod
+
+COPY pkg pkg
 
 ENV CGO_ENABLED=0 GOOS=linux GOARCH=amd64
 
