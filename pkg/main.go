@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"net/http/httputil"
 	"os"
 	"strings"
 )
@@ -162,23 +163,11 @@ func sendErrorResponse(res http.ResponseWriter, httpStatus int, message string) 
 }
 
 func printRequest(req *http.Request) {
-	fmt.Println("=== PROTOCOL ===")
-	fmt.Println(req.Proto)
-	fmt.Println()
-	fmt.Println("=== HOST ===")
-	fmt.Println(req.Host)
-	fmt.Println()
-	fmt.Println("=== METHOD ===")
-	fmt.Println(req.Method)
-	fmt.Println()
-	fmt.Println("=== PATH ===")
-	fmt.Println(req.URL.Path)
-	fmt.Println()
-	fmt.Println("=== HEADER ===")
-	fmt.Println(req.Header)
-	fmt.Println()
-	fmt.Println("=== BODY ===")
-	fmt.Println(req.Body)
-	fmt.Println()
-	fmt.Println("========================================" + "\n")
+	reqDump, err := httputil.DumpRequest(req, true)
+
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(string(reqDump))
 }
