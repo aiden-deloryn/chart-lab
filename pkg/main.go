@@ -2,10 +2,12 @@ package main
 
 import (
 	"encoding/base64"
+	"errors"
 	"flag"
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 	"strings"
 )
 
@@ -30,16 +32,29 @@ func main() {
 	fmt.Println("ChartLab is starting")
 	flag.Parse()
 
+	c := make(chan error)
 	http.HandleFunc("/", handleHelmRequest)
 
-	fmt.Println(fmt.Sprintf("Listening for HTTP on port: %v", httpPort))
-	go http.ListenAndServe(fmt.Sprintf(":%v", httpPort), nil)
-	fmt.Println(fmt.Sprintf("Listening for HTTPS on port: %v", httpsPort))
-	go http.ListenAndServeTLS(fmt.Sprintf(":%v", httpsPort), "tls/tls.crt", "tls/tls.key", nil)
+	go func() {
+		fmt.Println(fmt.Sprintf("Listening for HTTP on port: %v", httpPort))
+		c <- http.ListenAndServe(fmt.Sprintf(":%v", httpPort), nil)
+	}()
 
-	for {
-		// loop forever
+	_, crtErr := os.Open("tls/tls.crt")
+	_, keyErr := os.Open("tls/tls.key")
+
+	// Listen and Serve TLS only if keys exist
+	if !errors.Is(crtErr, os.ErrNotExist) && !errors.Is(keyErr, os.ErrNotExist) {
+		go func() {
+			fmt.Println(fmt.Sprintf("Listening for HTTPS on port: %v", httpsPort))
+			c <- http.ListenAndServeTLS(fmt.Sprintf(":%v", httpsPort), "tls/tls.crt", "tls/tls.key", nil)
+		}()
 	}
+
+	// Block forever, or until one of our listeners exits with an error
+	err := <-c
+
+	fmt.Println(err)
 }
 
 func handleHelmRequest(res http.ResponseWriter, req *http.Request) {
