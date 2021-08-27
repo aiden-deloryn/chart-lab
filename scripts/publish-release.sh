@@ -16,6 +16,14 @@ else
     exit 1
 fi
 
+if grep -Fq "${1}" README.md
+then
+    echo "Version tag verified: README.md"
+else
+    echo "ERROR: Version mismatch. Update the image tag version in README.md"
+    exit 1
+fi
+
 # Build and push docker image
 docker build -t aidendeloryn/chartlab:latest -t aidendeloryn/chartlab:${1} .
 docker push aidendeloryn/chartlab:latest

@@ -16,7 +16,7 @@ If you want to use HTTPS/TLS to create a secure connection between Helm and Char
 
 ```sh
 # Create the chartlab namespace
-kubectl apply -f https://raw.githubusercontent.com/aiden-deloryn/chart-lab/v1.0.0/config/namespace.yaml
+kubectl apply -f https://raw.githubusercontent.com/aiden-deloryn/chart-lab/v1.0.1/config/namespace.yaml
 
 # Create a TLS secret
 kubectl create secret tls chartlab-tls --cert=<path-to-cert-file> --key=<path-to-key-file> --namespace chartlab
@@ -27,7 +27,7 @@ kubectl create secret tls chartlab-tls --cert=<path-to-cert-file> --key=<path-to
 Install chartlab using the command below.
 
 ```sh
-kubectl apply -f https://raw.githubusercontent.com/aiden-deloryn/chart-lab/v1.0.0/config/deployment.yaml
+kubectl apply -f https://raw.githubusercontent.com/aiden-deloryn/chart-lab/v1.0.1/config/deployment.yaml
 ```
 
 ## Usage
